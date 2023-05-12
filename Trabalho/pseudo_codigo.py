@@ -112,7 +112,7 @@ def smo(X, y, C, tol, kernel_type, sigma, max_iter=100):
 C = 1
 tol = 0.001
 kernel_type = 'g'
-sigma = 1
+sigma = 0.3
 
 # Executar a função smo nos dados de treino
 alpha, bias = smo(X_train, y_train, C, tol, kernel_type, sigma)
@@ -181,6 +181,7 @@ Z = predict(np.c_[xx.ravel(), yy.ravel()], X_train[:, :2], y_train, alpha, bias,
 Z = Z.reshape(xx.shape)
 
 # Gráfico da fronteira de decisão e os pontos de treino
+
 plt.contour(xx, yy, Z, colors='k', levels=[-1, 0, 1], alpha=0.5, linestyles=['--', '-', '--'])
 plt.scatter(X_train[:, 0], X_train[:, 1], c=y_train, cmap=plt.cm.Paired, edgecolors='k')
 plt.xlabel('Feature 1')
