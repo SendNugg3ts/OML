@@ -1,4 +1,4 @@
-    %vers„o simplificada do SMO algoritmo 
+    %vers√£o simplificada do SMO algoritmo 
     clear;
     clc;
     close all
@@ -15,15 +15,16 @@
     %Data=csvread('ex2data2.csv');   %400 pontos  usar Kernel
     Data = csvread('Iris.csv')
 
-% FunÁ„o de label encoding
+    % Fazer label enconding aos dados
+
+% Fun√ß√£o de label encoding
 
     [N, M]=size(Data); 
     Xdata=Data(:,1:M-1);  
     Ydata=Data(:,M); 
-    label_encoding(Ydata);
-    I=M-1; %n˙mero de componentes de cada vetor xn 
+    I=M-1; %n√∫mero de componentes de cada vetor xn 
     
-    %---------- gr·fico  de todo o data set 
+    %---------- gr√°fico  de todo o data set 
     figure(1);
     In=find(Ydata==-1);
     Ip=find(Ydata==1);
@@ -51,12 +52,12 @@
     Xt=Xdata(p(1:Nt),:);   
     Yt=Ydata(p(1:Nt),:);  
     
-    %Data set para validaÁ„o - 20% do Data set -- selecionado aleatoriamente 
+    %Data set para valida√ß√£o - 20% do Data set -- selecionado aleatoriamente 
     Xv=Xdata(p(Nt+1:N),:);
     Yv=Ydata(p(Nt+1:N),:);
    
 
-    %---------- adaptar ‡ configuraÁ„o do algoritmo SMO
+    %---------- adaptar √† configura√ß√£o do algoritmo SMO
     
     X=Xt';   % Pontos -- organiza-los por coluna: x1; x2; ...;xN
     y=Yt';   % labels correspondentes -- vetor linha: y1,y2,...,yN
@@ -181,11 +182,11 @@
     end
     
    %%%
-   ErrDv=sum(abs(Yp-Yv'));  % out-sample error == erro com o data de validaÁ„o
+   ErrDv=sum(abs(Yp-Yv'));  % out-sample error == erro com o data de valida√ß√£o
     
    fprintf('\n out-sample error: %.4e ', ErrDv);
     
-   %---- gr·fico  do data set de treino 
+   %---- gr√°fico  do data set de treino 
     figure
     In=find(Yt==-1);
     Ip=find(Yt==1);
@@ -194,11 +195,11 @@
     h(2)=plot(Xt(Ip,1),Xt(Ip,2),'b.','MarkerSize',15);
     hold on
     %ezpolar(@(x)1); %ezpolar(@(x)2);
-    %-- gr·fico dos support vectors
+    %-- gr√°fico dos support vectors
     h(3)=plot(X(1,Index),X(2,Index),'ko','MarkerSize',8);
     hold on
     %---- opcional
-    flag=1;  % flag=1 faz tambÈm o gr·fico do  data set de validaÁ„o; flag=0  n„o faz o gr·fico do  data set de validaÁ„o
+    flag=1;  % flag=1 faz tamb√©m o gr√°fico do  data set de valida√ß√£o; flag=0  n√£o faz o gr√°fico do  data set de valida√ß√£o
     if flag
         In=find(Yv==-1);
         Ip=find(Yv==1);
@@ -208,7 +209,7 @@
         hold on
     end
         
-    %--- faz o gr·fico da fronteira de decis„o
+    %--- faz o gr√°fico da fronteira de decis√£o
     d = 0.1;
     [x1Grid,x2Grid] = meshgrid(min(Xt(:,1)):d:max(Xt(:,1)),...
     min(Xt(:,2)):d:max(Xt(:,2)));
@@ -228,11 +229,11 @@
      
  
     %----
-    title('SVM dual com SMO  + fronteira de decis„o');
+    title('SVM dual com SMO  + fronteira de decis√£o');
     if ~flag
        legend(h,{'-1: data set treino','+1: data set treino','Support Vectors'});    
     else  
-       legend(h,{'-1: data set treino','+1: data set treino','Support Vectors', '-1: data set validaÁ„o','+1: data set validaÁ„o'});
+       legend(h,{'-1: data set treino','+1: data set treino','Support Vectors', '-1: data set valida√ß√£o','+1: data set valida√ß√£o'});
         
     end
     axis equal
