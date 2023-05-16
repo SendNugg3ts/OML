@@ -37,7 +37,6 @@ y = label_encoding(y)
 # Separar os dados em treino e teste
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-
 # DEFINIR OS PARAMETROS
 C = 1
 tol = 0.001
@@ -45,6 +44,7 @@ kernel_type = 'l'
 sigma = 0.7
 max_passes = 3
 max_iter= 200
+
 #Definir a função de kernel
 def kernel(x1, x2, kernel_type, sigma):
     if kernel_type == 'l': #linear
@@ -56,7 +56,7 @@ def kernel(x1, x2, kernel_type, sigma):
 
 
 #ALGORITMO SMO
-def smo(X, y, C, tol, kernel_type, sigma, max_iter):
+def smo(X, y, C, tol, kernel_type, sigma, max_iter=200):
     n_samples, n_features = X.shape
     m = X.shape[0]
     # compute kernel matrix
@@ -117,6 +117,7 @@ def smo(X, y, C, tol, kernel_type, sigma, max_iter):
 
 # Executar a função smo nos dados de treino
 alpha, bias = smo(X_train, y_train, C, tol, kernel_type, sigma)
+
 # Calcular os multiplicadores de Lagrange e o bias
 print(f'Multiplicadores de Lagrange: {alpha}')
 print(f'Bias: {bias}')
@@ -127,8 +128,6 @@ idx = np.arange(len(alpha))[sv]
 alpha_sv = alpha[sv]
 X_sv = X_train[sv]
 y_sv = y_train[sv]
-
-
 
 # calcular bias
 bias = 0
@@ -143,7 +142,6 @@ for j in range(len(idx)):
     print(f"{idx[j]:4d}    {alpha_sv[j]:.4f}      x=[{X_sv[j,0]:.4f}, {X_sv[j,1]:.4f}]     {y_sv[j]:4}")
 
 
-
 #CLASSIFICADOR 
 Xx = np.transpose(X_test)
 m, n = Xx.shape
@@ -155,6 +153,8 @@ for i in range(n):
 
 ErrDv = np.sum(np.abs(Yp - np.transpose(y_test)))  # out-sample error == error with validation data
 print('\n out-sample error: %.4e ' % ErrDv)
+
+
 
 
 
@@ -183,8 +183,6 @@ if flag:
 d = 0.1
 x1_min, x1_max = Xt[:, 0].min() - 1, Xt[:, 0].max() + 1
 x2_min, x2_max = Xt[:, 1].min() - 1, Xt[:, 1].max() + 1
-#num_points = 50  # ajuste este valor como desejado
-#x1Grid, x2Grid = np.meshgrid(np.linspace(x1_min, x1_max, num_points), np.linspace(x2_min, x2_max, num_points))
 
 x1Grid, x2Grid = np.meshgrid(np.arange(min(Xt[:, 0]), max(Xt[:, 0]), d),
                              np.arange(min(Xt[:, 1]), max(Xt[:, 1]), d))
@@ -215,6 +213,57 @@ plt.show()
 
 
 
+# Gráfico
+Yt=y_train
+Xt=X_train
+Yv=y_test
+Xv=X_test
+
+In = np.where(Yt == -1)[0]
+Ip = np.where(Yt == 1)[0]
+
+plt.plot(Xt[In, 0], Xt[In, 1], 'r.', markersize=15, label='-1: Conjunto de treinamento')
+plt.plot(Xt[Ip, 0], Xt[Ip, 1], 'b.', markersize=15, label='+1: Conjunto de treinamento')
+
+# Gráfico dos support vectors
+idx = np.argwhere(alpha > 0).flatten()
+plt.plot(Xt[idx, 0], Xt[idx, 1], 'ko', markersize=8, label='Support Vectors')
+
+# Opcional: Gráfico do conjunto de validação
+flag = True  # flag=True para incluir o conjunto de validação no gráfico, flag=False para não incluir
+if flag:
+    In = np.where(Yv == -1)[0]
+    Ip = np.where(Yv == 1)[0]
+    plt.plot(Xv[In, 0], Xv[In, 1], 'ro', markersize=4, label='-1: Conjunto de validação')
+    plt.plot(Xv[Ip, 0], Xv[Ip, 1], 'bo', markersize=4, label='+1: Conjunto de validação')
+
+
+# Gráfico da fronteira de decisão
+d = 0.1
+x1_min, x1_max = Xt[:, 0].min() - 1, Xt[:, 0].max() + 1
+x2_min, x2_max = Xt[:, 1].min() - 1, Xt[:, 1].max() + 1
+
+x1Grid, x2Grid = np.meshgrid(np.arange(x1_min, x1_max, d), np.arange(x2_min, x2_max, d))
+
+xGrid = np.column_stack([x1Grid.ravel(), x2Grid.ravel()]).T
+
+#xGrid = np.column_stack([x1Grid.ravel(), x2Grid.ravel()])
+
+Yp = np.zeros(x1Grid.shape)
+
+for i in range(xGrid.shape[0]):
+    K = kernel(Xt[idx], np.expand_dims(xGrid[i], axis=0), kernel_type, sigma)
+    Yp.ravel()[i] = np.sum(alpha[idx] * Yt[idx] * K)
+
+contour = plt.contour(x1Grid, x2Grid, Yp, levels=[0], colors='k', linewidths=1)
+
+# Configurações adicionais do gráfico
+plt.title('SVM dual com SMO + fronteira de decisão')
+plt.xlabel('Característica 1')
+plt.ylabel('Característica 2')
+plt.legend()
+plt.axis('equal')
+plt.show()
 
 
 
@@ -227,7 +276,18 @@ plt.show()
 
 
 
-<<<<<<< Updated upstream:Trabalho/Codigo_parte1.py
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -242,5 +302,3 @@ plt.show()
     #Yp = np.dot(K.T, alpha * y_sv) + bias
 
     #Yp[i] = np.sum(alpha * y_sv * K) + bias
-=======
->>>>>>> Stashed changes:Trabalho/pseudo_codigo.py
