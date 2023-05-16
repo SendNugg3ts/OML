@@ -116,12 +116,7 @@ def smo(X, y, C, tol, kernel_type, sigma, max_iter=200):
 
 
 # Executar a função smo nos dados de treino
-<<<<<<< HEAD
-alpha, bias = smo(X_train, y_train, C, tol, kernel_type, sigma)
-
-=======
 alpha, bias = smo(X_train, y_train, C, tol, kernel_type, sigma,max_iter)
->>>>>>> 1986c833406f8618f4f9d03bb50f6acdc301b440
 # Calcular os multiplicadores de Lagrange e o bias
 print(f'Multiplicadores de Lagrange: {alpha}')
 print(f'Bias: {bias}')
@@ -163,6 +158,7 @@ print('\n out-sample error: %.4e ' % ErrDv)
 
 
 # Gráfico
+
 Yt=y_train
 Xt=X_train
 Yv=y_test
@@ -192,17 +188,17 @@ x2_min, x2_max = Xt[:, 1].min() - 1, Xt[:, 1].max() + 1
 x1Grid, x2Grid = np.meshgrid(np.arange(min(Xt[:, 0]), max(Xt[:, 0]), d),
                              np.arange(min(Xt[:, 1]), max(Xt[:, 1]), d))
 
+xGrid = np.column_stack([x1Grid.ravel(), x2Grid.ravel()]).T
 
-xGrid = np.column_stack([x1Grid.ravel(), x2Grid.ravel()])
-
-Yp = np.zeros_like(x1Grid)
+Yp = np.zeros(x1Grid.shape)
 
 
-for i in range(xGrid.shape[0]):
-    K = kernel(X_sv, np.expand_dims(xGrid[i], axis=0), kernel_type, sigma)
-    Yp[i] = np.sum(alpha * y_sv * K)
 
-Yp = Yp.reshape(x1Grid.shape)
+
+
+for i in range(xGrid.shape[1]):
+    K = kernel(X_sv, xGrid[:, i], kernel_type, sigma)
+    Yp.ravel()[i] = np.sum(alpha_sv * y_sv * K)
 
 contour = plt.contour(x1Grid, x2Grid, Yp, levels=[0], colors='k', linewidths=1)
 
