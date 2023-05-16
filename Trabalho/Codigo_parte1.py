@@ -116,7 +116,7 @@ def smo(X, y, C, tol, kernel_type, sigma, max_iter):
 
 
 # Executar a função smo nos dados de treino
-alpha, bias = smo(X_train, y_train, C, tol, kernel_type, sigma)
+alpha, bias = smo(X_train, y_train, C, tol, kernel_type, sigma,max_iter)
 # Calcular os multiplicadores de Lagrange e o bias
 print(f'Multiplicadores de Lagrange: {alpha}')
 print(f'Bias: {bias}')
@@ -169,7 +169,8 @@ plt.plot(Xt[In, 0], Xt[In, 1], 'r.', markersize=15, label='-1: Conjunto de trein
 plt.plot(Xt[Ip, 0], Xt[Ip, 1], 'b.', markersize=15, label='+1: Conjunto de treinamento')
 
 # Gráfico dos support vectors
-plt.plot(X[0, idx], X[1, idx], 'ko', markersize=8, label='Support Vectors')
+for j in range(len(idx)):
+    plt.plot(X_sv[j,0], X_sv[j,1], 'ko', markersize=8, label='Support Vectors')
 
 # Opcional: Gráfico do conjunto de validação
 flag = True  # flag=True para incluir o conjunto de validação no gráfico, flag=False para não incluir
@@ -193,6 +194,8 @@ x1Grid, x2Grid = np.meshgrid(np.arange(min(Xt[:, 0]), max(Xt[:, 0]), d),
 xGrid = np.column_stack([x1Grid.ravel(), x2Grid.ravel()])
 
 Yp = np.zeros_like(x1Grid)
+
+
 for i in range(xGrid.shape[0]):
     K = kernel(X_sv, np.expand_dims(xGrid[i], axis=0), kernel_type, sigma)
     Yp[i] = np.sum(alpha * y_sv * K)
@@ -205,7 +208,7 @@ contour = plt.contour(x1Grid, x2Grid, Yp, levels=[0], colors='k', linewidths=1)
 plt.title('SVM dual com SMO + fronteira de decisão')
 plt.xlabel('Característica 1')
 plt.ylabel('Característica 2')
-plt.legend()
+#plt.legend()
 plt.axis('equal')
 plt.show()
 
@@ -227,7 +230,6 @@ plt.show()
 
 
 
-<<<<<<< Updated upstream:Trabalho/Codigo_parte1.py
 
 
 
@@ -242,5 +244,3 @@ plt.show()
     #Yp = np.dot(K.T, alpha * y_sv) + bias
 
     #Yp[i] = np.sum(alpha * y_sv * K) + bias
-=======
->>>>>>> Stashed changes:Trabalho/pseudo_codigo.py
