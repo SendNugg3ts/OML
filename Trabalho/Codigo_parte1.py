@@ -136,30 +136,11 @@ for i in range(len(alpha_sv)):
     bias = y_sv[i] - np.sum(alpha_sv * y_sv * kernel(X_sv, X_sv[i], kernel_type, sigma))
 bias /= len(alpha_sv)
 
-<<<<<<< Updated upstream:Trabalho/Codigo_parte1.py
 # SVM - Vetores de suporte:
 print("SVM - Vetores de suporte:")
 print("  n:    alpha_n         Xsv                   Y_n")
 for j in range(len(idx)):
     print(f"{idx[j]:4d}    {alpha_sv[j]:.4f}      x=[{X_sv[j,0]:.4f}, {X_sv[j,1]:.4f}]     {y_sv[j]:4}")
-=======
-# predição para todo o conjunto de teste
-y_pred = predict(X_test_encoded, X_sv, y_sv, alpha_sv, bias, kernel_type, sigma)
-
-y_test_encoded = np.where(y_test == -1, -1, 1)
-cm = confusion_matrix(y_test_encoded, y_pred)
-acc = accuracy_score(y_test_encoded, y_pred)
-
-print(f"Desempenho: {acc:.2f}")
-print(f"Matriz de confusão:\n{cm}")
-#erro de validação
-ErrDv = np.sum(np.abs(y_pred - y_test_encoded))
-print(f'out-sample error: {ErrDv:.4e}')
-
-# Obter os índices dos pontos de suporte vetor
-sv = alpha > 0
-idx_sv = np.arange(len(alpha))[sv]
->>>>>>> Stashed changes:Trabalho/pseudo_codigo.py
 
 
 
