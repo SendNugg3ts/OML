@@ -12,8 +12,8 @@ iris = sns.load_dataset('iris')
 # Criar um gráfico de dispersão com marcadores diferenciados para a espécie setosa e as outras espécies
 setosa = iris[iris['species'] == 'setosa']
 Outras_especies = iris[iris['species'] != 'setosa']
-sns.scatterplot(data=setosa, x='petal_length', y='sepal_width', marker='o', label='setosa')
-sns.scatterplot(data=Outras_especies, x='petal_length', y='sepal_width', marker='v', label='outras espécies')
+sns.scatterplot(data=setosa, x='sepal_length', y='sepal_width', marker='o', label='setosa')
+sns.scatterplot(data=Outras_especies, x='sepal_length', y='sepal_width', marker='v', label='outras espécies')
 plt.legend(labels=['setosa', 'outras espécies'])
 plt.show()
 
